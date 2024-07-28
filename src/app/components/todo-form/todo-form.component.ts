@@ -6,17 +6,29 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TodoSignalsService } from 'src/app/services/todo-signals.service';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-todo-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+  ],
   templateUrl: './todo-form.component.html',
   styleUrls: []
 })
 export class TodoFormComponent {
   //injetar serviços no Angular 16 é feito por propriedades, não mais pelo construtor:
   private todosSignalsService = inject(TodoSignalsService);
+  private dialogRefService = inject(MatDialogRef<HeaderComponent>);
   public allTodos = this.todosSignalsService.todosState();
 
   public todosForm = new FormGroup({
@@ -26,15 +38,19 @@ export class TodoFormComponent {
 
 
   public handleCreateNewTodo(): void {
-    if(this.todosForm.value && this.todosForm.valid){
+    if (this.todosForm.value && this.todosForm.valid) {
       const title = String(this.todosForm.controls['title'].value);
       const description = String(this.todosForm.controls['description'].value);
       const id = this.allTodos.length > 0 ? this.allTodos.length + 1 : 1;
       const done = false;
 
-      this.todosSignalsService.updateTodos({id, title, description, done});
-
+      this.todosSignalsService.updateTodos({ id, title, description, done });
+      this.dialogRefService.close();
     }
+  }
+
+  handleCloseMOdal(): void {
+    this.dialogRefService.close();
   }
 
 }
