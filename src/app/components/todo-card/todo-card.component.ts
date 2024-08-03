@@ -7,6 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TodoSignalsService } from 'src/app/services/todo-signals.service';
 import { TodoKeyLocalStorage } from 'src/app/models/enum/todoKeyLocalStorage';
 import { Todo } from 'src/app/models/model/todo.model';
+import { CustomUpperCasePipe } from 'src/app/shared/pipes/customUpperCase.pipe';
 
 @Component({
   selector: 'app-todo-card',
@@ -19,6 +20,7 @@ import { Todo } from 'src/app/models/model/todo.model';
     MatButtonModule,
     MatIconModule,
     MatTabsModule,
+    CustomUpperCasePipe,
   ],
   templateUrl: './todo-card.component.html',
   styleUrls: []
@@ -52,10 +54,10 @@ export class TodoCardComponent implements OnInit {
   }
 
   public handleDeleteTodo(todo: Todo): void {
-    if(todo){
+    if (todo) {
       const index = this.todosList().indexOf(todo);
 
-      if(index !== -1){
+      if (index !== -1) {
         this.todosSignal.mutate((todos) => {
           todos.splice(index, 1);
           //Salvar os dados atuais das todos:
